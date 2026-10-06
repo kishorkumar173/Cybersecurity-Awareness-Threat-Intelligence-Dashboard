@@ -68,9 +68,11 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     port = int(os.getenv("PORT", 5000))
-    host = os.getenv("HOST", "127.0.0.1")
+    # Bind to 0.0.0.0 so Render and cloud proxies can detect open ports
+    host = os.getenv("HOST", "0.0.0.0")
+    debug_mode = os.getenv("DEBUG", "False").lower() in ("true", "1", "t")
     print(f"\n==================================================================")
     print(f" Cybersecurity Awareness & Threat Intelligence Dashboard")
     print(f" Defensive Engine Active at: http://{host}:{port}")
     print(f"==================================================================\n")
-    app.run(host=host, port=port, debug=True)
+    app.run(host=host, port=port, debug=debug_mode)
