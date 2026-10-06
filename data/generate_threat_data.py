@@ -11,8 +11,8 @@ All indicators strictly adhere to safe RFC/documentation standards:
 import os
 import random
 import hashlib
+import csv
 from datetime import datetime, timedelta
-import pandas as pd
 
 random.seed(42)
 
@@ -315,7 +315,7 @@ def generate_threat_dataset():
             "campaign_id": camp_id
         })
 
-    return pd.DataFrame(records)
+    return records
 
 def generate_vulnerability_dataset():
     cve_data = []
@@ -338,16 +338,24 @@ def generate_vulnerability_dataset():
             "priority_score": min(priority, 100),
             "description": f"{desc}. Strictly analyzed as synthetic vulnerability awareness telemetry."
         })
-    return pd.DataFrame(cve_data)
+    return cve_data
 
 if __name__ == "__main__":
     out_dir = os.path.dirname(os.path.abspath(__file__))
-    threat_df = generate_threat_dataset()
+    threat_records = generate_threat_dataset()
     threat_path = os.path.join(out_dir, "threat_intelligence_dataset.csv")
-    threat_df.to_csv(threat_path, index=False)
-    print(f"Generated {len(threat_df)} threat records at: {threat_path}")
+    if threat_records:
+        with open(threat_path, mode="w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=list(threat_records[0].keys()))
+            writer.writeheader()
+            writer.writerows(threat_records)
+    print(f"Generated {len(threat_records)} threat records at: {threat_path}")
 
-    vuln_df = generate_vulnerability_dataset()
+    vuln_records = generate_vulnerability_dataset()
     vuln_path = os.path.join(out_dir, "vulnerabilities.csv")
-    vuln_df.to_csv(vuln_path, index=False)
-    print(f"Generated {len(vuln_df)} vulnerability records at: {vuln_path}")
+    if vuln_records:
+        with open(vuln_path, mode="w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=list(vuln_records[0].keys()))
+            writer.writeheader()
+            writer.writerows(vuln_records)
+    print(f"Generated {len(vuln_records)} vulnerability records at: {vuln_path}")

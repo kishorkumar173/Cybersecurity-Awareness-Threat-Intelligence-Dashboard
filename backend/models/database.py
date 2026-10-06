@@ -14,7 +14,7 @@ SQLite relational store managing:
 
 import sqlite3
 import os
-import pandas as pd
+import csv
 
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "..", "data", "cyber_threat_intel.db")
 DB_PATH = os.path.abspath(DB_PATH)
@@ -138,106 +138,113 @@ def init_db(force_reseed=False):
 
     csv_path = os.path.join(os.path.dirname(DB_PATH), "threat_intelligence_dataset.csv")
     if (cnt == 0 or force_reseed) and os.path.exists(csv_path):
-        df = pd.read_csv(csv_path)
-        for _, row in df.iterrows():
-            tid = str(row["threat_id"])
-            cur.execute("""
-                INSERT OR REPLACE INTO THREATS 
-                (threat_id, threat_name, category, description, severity, risk_score, confidence_score, status, first_seen, last_seen, country_or_region, campaign_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                tid,
-                str(row["threat_name"]),
-                str(row["threat_category"]),
-                str(row["description"]),
-                str(row["severity"]),
-                float(row["risk_score"]),
-                float(row["confidence_score"]),
-                str(row["status"]),
-                str(row["first_seen"]),
-                str(row["last_seen"]),
-                str(row.get("country_or_region_optional", "Global")),
-                str(row.get("campaign_id", ""))
-            ))
-
-            cur.execute("""
-                INSERT INTO INDICATORS (threat_id, indicator_type, indicator_value, first_seen, last_seen)
-                VALUES (?, ?, ?, ?, ?)
-            """, (
-                tid,
-                str(row["indicator_type"]),
-                str(row["indicator_value"]),
-                str(row["first_seen"]),
-                str(row["last_seen"])
-            ))
-
-            cur.execute("""
-                INSERT INTO SOURCES (threat_id, source_name, reliability)
-                VALUES (?, ?, ?)
-            """, (
-                tid,
-                str(row["source_name"]),
-                str(row.get("source_reliability", "B – Usually Reliable"))
-            ))
-
-            if pd.notna(row.get("mitre_tactic_optional")) and str(row.get("mitre_tactic_optional")).strip():
+        with open(csv_path, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            threat_count = 0
+            for row in reader:
+                threat_count += 1
+                tid = str(row["threat_id"])
                 cur.execute("""
-                    INSERT INTO ATTACK_MAPPINGS (threat_id, tactic, technique, technique_id)
-                    VALUES (?, ?, ?, ?)
+                    INSERT OR REPLACE INTO THREATS 
+                    (threat_id, threat_name, category, description, severity, risk_score, confidence_score, status, first_seen, last_seen, country_or_region, campaign_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
                     tid,
-                    str(row["mitre_tactic_optional"]),
-                    str(row["mitre_technique_optional"]),
-                    str(row.get("mitre_technique_id", ""))
-                ))
-
-            # Generate alerts for high/critical threats
-            if float(row["risk_score"]) >= 70 or str(row["severity"]) in ["HIGH", "CRITICAL"]:
-                alt_id = f"ALT-{tid.replace('THR-', '')}"
-                cur.execute("""
-                    INSERT OR REPLACE INTO ALERTS
-                    (alert_id, threat_id, alert_type, severity, risk_score, confidence_score, description, status, created_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (
-                    alt_id,
-                    tid,
-                    f"{row['threat_category']}_ALERT",
+                    str(row["threat_name"]),
+                    str(row["threat_category"]),
+                    str(row["description"]),
                     str(row["severity"]),
                     float(row["risk_score"]),
                     float(row["confidence_score"]),
-                    f"Prioritized defensive alert: {row['threat_name']} with risk {row['risk_score']}/100.",
-                    "NEW" if float(row["risk_score"]) >= 80 else "INVESTIGATING",
+                    str(row["status"]),
+                    str(row["first_seen"]),
+                    str(row["last_seen"]),
+                    str(row.get("country_or_region_optional") or "Global"),
+                    str(row.get("campaign_id") or "")
+                ))
+
+                cur.execute("""
+                    INSERT INTO INDICATORS (threat_id, indicator_type, indicator_value, first_seen, last_seen)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (
+                    tid,
+                    str(row["indicator_type"]),
+                    str(row["indicator_value"]),
+                    str(row["first_seen"]),
                     str(row["last_seen"])
                 ))
 
-        conn.commit()
-        print(f"Database seeded with {len(df)} threat records.")
+                cur.execute("""
+                    INSERT INTO SOURCES (threat_id, source_name, reliability)
+                    VALUES (?, ?, ?)
+                """, (
+                    tid,
+                    str(row["source_name"]),
+                    str(row.get("source_reliability") or "B – Usually Reliable")
+                ))
+
+                tactic = str(row.get("mitre_tactic_optional") or "").strip()
+                if tactic:
+                    cur.execute("""
+                        INSERT INTO ATTACK_MAPPINGS (threat_id, tactic, technique, technique_id)
+                        VALUES (?, ?, ?, ?)
+                    """, (
+                        tid,
+                        tactic,
+                        str(row.get("mitre_technique_optional") or ""),
+                        str(row.get("mitre_technique_id") or "")
+                    ))
+
+                # Generate alerts for high/critical threats
+                if float(row["risk_score"]) >= 70 or str(row["severity"]) in ["HIGH", "CRITICAL"]:
+                    alt_id = f"ALT-{tid.replace('THR-', '')}"
+                    cur.execute("""
+                        INSERT OR REPLACE INTO ALERTS
+                        (alert_id, threat_id, alert_type, severity, risk_score, confidence_score, description, status, created_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """, (
+                        alt_id,
+                        tid,
+                        f"{row['threat_category']}_ALERT",
+                        str(row["severity"]),
+                        float(row["risk_score"]),
+                        float(row["confidence_score"]),
+                        f"Prioritized defensive alert: {row['threat_name']} with risk {row['risk_score']}/100.",
+                        "NEW" if float(row["risk_score"]) >= 80 else "INVESTIGATING",
+                        str(row["last_seen"])
+                    ))
+
+            conn.commit()
+            print(f"Database seeded with {threat_count} threat records.")
 
     # Seed vulnerabilities
     vuln_csv = os.path.join(os.path.dirname(DB_PATH), "vulnerabilities.csv")
     cur.execute("SELECT COUNT(*) FROM VULNERABILITIES")
     vcnt = cur.fetchone()[0]
     if (vcnt == 0 or force_reseed) and os.path.exists(vuln_csv):
-        vdf = pd.read_csv(vuln_csv)
-        for _, row in vdf.iterrows():
-            cur.execute("""
-                INSERT OR REPLACE INTO VULNERABILITIES
-                (vulnerability_id, cve_id, product_category, severity, cvss_score, patch_available, priority_score, exploitation_status, description, published_date)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                str(row["vulnerability_id"]),
-                str(row["cve_id"]),
-                str(row["product_category"]),
-                str(row["severity"]),
-                float(row["cvss_score"]),
-                str(row["patch_available"]),
-                float(row["priority_score"]),
-                str(row["exploitation_status_demo"]),
-                str(row["description"]),
-                str(row["published_date"])
-            ))
-        conn.commit()
-        print(f"Database seeded with {len(vdf)} vulnerability records.")
+        with open(vuln_csv, mode="r", encoding="utf-8") as f:
+            v_reader = csv.DictReader(f)
+            vuln_count = 0
+            for row in v_reader:
+                vuln_count += 1
+                cur.execute("""
+                    INSERT OR REPLACE INTO VULNERABILITIES
+                    (vulnerability_id, cve_id, product_category, severity, cvss_score, patch_available, priority_score, exploitation_status, description, published_date)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    str(row["vulnerability_id"]),
+                    str(row["cve_id"]),
+                    str(row["product_category"]),
+                    str(row["severity"]),
+                    float(row["cvss_score"]),
+                    str(row["patch_available"]),
+                    float(row["priority_score"]),
+                    str(row["exploitation_status_demo"]),
+                    str(row["description"]),
+                    str(row["published_date"])
+                ))
+            conn.commit()
+            print(f"Database seeded with {vuln_count} vulnerability records.")
 
     # Seed initial analyst note for benchmark threat
     cur.execute("SELECT COUNT(*) FROM ANALYST_NOTES WHERE threat_id = 'THR-2026-001'")

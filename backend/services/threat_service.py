@@ -5,7 +5,6 @@ Handles query filtering, sorting, statistics, indicator search, and CRUD.
 
 from typing import Dict, Any, List, Optional
 import sqlite3
-import pandas as pd
 from backend.models.database import get_db_connection
 from backend.services.ioc_validator import validate_indicator
 from backend.services.enrichment_engine import enrich_indicator
