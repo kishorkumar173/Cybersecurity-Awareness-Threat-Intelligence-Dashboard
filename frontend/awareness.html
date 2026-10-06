@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybersecurity Awareness &amp; Learning Center</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🎓</div>
+      <div>
+        <div class="brand-title">CYBER INTEL &amp; AWARENESS</div>
+        <div style="font-size:0.68rem; color:#8b949e;">Security Awareness Center</div>
+      </div>
+      <span class="brand-badge">HUMAN DEFENSE LAYER</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">SOC Dashboard</a></li>
+      <li><a href="threat-dashboard.html" class="nav-link">Threat Repository</a></li>
+      <li><a href="awareness.html" class="nav-link active">Awareness Center</a></li>
+      <li><a href="quiz.html" class="nav-link">Security Quiz</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+
+    <div class="panel-header" style="border:none; margin-bottom:12px;">
+      <div>
+        <h2 style="font-size:1.6rem; color:#fff;">Defensive Security Awareness Center</h2>
+        <p style="color:var(--text-muted); font-size:0.88rem; margin-top:4px;">
+          Empowering human defenders with 15 core defensive modules. Threat intelligence identifies adversary tactics; awareness inoculates the organization against initial access.
+        </p>
+      </div>
+      <a href="quiz.html" class="btn btn-emerald">Take the 30-Question Quiz &rarr;</a>
+    </div>
+
+    <!-- 15 Interactive Micro-learning Modules Grid -->
+    <div class="module-grid" id="modulesGrid">
+      <div style="color:#8b949e; text-align:center; grid-column:1/-1;">Loading defensive awareness curricula...</div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div><strong>Cybersecurity Awareness &amp; Threat Intelligence Dashboard</strong> &mdash; Industry Defensive Architecture</div>
+  </footer>
+
+  <script>
+    async function loadModules() {
+      try {
+        const res = await fetch("/api/awareness/modules");
+        const data = await res.json();
+        const container = document.getElementById("modulesGrid");
+        container.innerHTML = "";
+
+        data.modules.forEach(m => {
+          const card = document.createElement("div");
+          card.className = "module-card";
+          card.innerHTML = `
+            <div class="module-tag">${m.category}</div>
+            <div class="module-title">${m.title}</div>
+            <div class="module-text">${m.what_is_it}</div>
+            
+            <div style="background:var(--bg-secondary); border-radius:var(--radius-sm); padding:10px; margin-bottom:12px; font-size:0.8rem;">
+              <strong style="color:#f43f5e; display:block; margin-bottom:4px;">🚨 Warning Signs:</strong>
+              <ul style="margin-left:16px; color:#cbd5e1;">
+                ${(m.warning_signs || []).slice(0, 3).map(s => `<li>${s}</li>`).join("")}
+              </ul>
+            </div>
+
+            <div style="background:rgba(16, 185, 129, 0.08); border-left:3px solid var(--emerald); padding:8px 10px; border-radius:4px; font-size:0.78rem; color:#a7f3d0; margin-bottom:12px;">
+              <strong>🛡️ Safe Practice:</strong> ${(m.safe_practices || [])[0] || 'Follow security protocols.'}
+            </div>
+
+            <div style="font-size:0.75rem; color:#8b949e;">
+              <strong>Immediate Action:</strong> ${m.what_to_do}
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Failed to load modules:", err);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadModules);
+  </script>
+</body>
+</html>

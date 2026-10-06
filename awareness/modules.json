@@ -1,0 +1,289 @@
+[
+  {
+    "id": "mod-01",
+    "title": "Phishing Awareness & Deception Detection",
+    "category": "Phishing",
+    "icon": "mail",
+    "what_is_it": "Phishing is a social engineering attack where adversaries impersonate legitimate entities (such as IT support, banks, or executive leadership) to deceive individuals into divulging sensitive credentials, financial data, or triggering malicious links.",
+    "why_matters": "Over 80% of enterprise security incidents originate with a deceptive email or message. Detecting phishing at the human boundary prevents initial access.",
+    "warning_signs": [
+      "Artificial urgency (e.g., 'Account locked within 1 hour unless verified')",
+      "Mismatched sender address or deceptive domain typosquatting",
+      "Generic greetings or unexpected attachments (.iso, .zip, .exe, .html)",
+      "Unprompted password resets, wire transfer, or gift card instructions",
+      "Unexpected QR codes embedded in email bodies (Quishing)"
+    ],
+    "safe_practices": [
+      "Always inspect full sender domain headers rather than just display names",
+      "Navigate directly to known portal bookmarks rather than clicking links in emails",
+      "Report suspicious messages to the SOC using the official reporting button",
+      "Never approve MFA prompts or enter passwords on unverified domains"
+    ],
+    "what_to_do": "If you clicked a suspicious link or provided credentials: Immediately disconnect Wi-Fi/network, notify your SOC/Helpdesk, and reset passwords from a secondary known-clean device."
+  },
+  {
+    "id": "mod-02",
+    "title": "Password Security & Modern Authentication",
+    "category": "Passwords",
+    "icon": "key",
+    "what_is_it": "Password security involves using robust, non-reusable secrets and password managers to prevent credential stuffing and brute-force compromise.",
+    "why_matters": "Adversaries automate credential stuffing across hundreds of services using compromised databases from third-party breaches.",
+    "warning_signs": [
+      "Reusing the same password across personal and work services",
+      "Short passwords under 12 characters or using common dictionary words",
+      "Storing passwords in unencrypted spreadsheets or sticky notes"
+    ],
+    "safe_practices": [
+      "Use passphrases of 4+ random words or 16+ randomized characters",
+      "Adopt an enterprise-approved password manager",
+      "Never share administrative or personal credentials over chat or email",
+      "Migrate to FIDO2 Passkeys where supported"
+    ],
+    "what_to_do": "If you suspect a password leak, immediately change it across all shared accounts and verify active login sessions."
+  },
+  {
+    "id": "mod-03",
+    "title": "Multi-Factor Authentication (MFA) & Fatigue Defense",
+    "category": "MFA",
+    "icon": "shield-check",
+    "what_is_it": "MFA requires two or more verification factors (knowledge: password, possession: hardware key/authenticator app, inherence: biometrics) before granting access.",
+    "why_matters": "MFA blocks over 98% of automated credential stuffing attacks. However, attackers attempt MFA push bombing to exhaust users into approving requests.",
+    "warning_signs": [
+      "Sudden flood of mobile authenticator push notifications when you are not logging in",
+      "Caller claiming to be IT asking for your 6-digit one-time code",
+      "SMS-based codes requested by strangers on WhatsApp or Telegram"
+    ],
+    "safe_practices": [
+      "Prefer FIDO2/WebAuthn hardware keys or number-matching authenticator apps over SMS",
+      "Deny and report any unprompted push notification immediately",
+      "Never dictate one-time codes to anyone, including IT personnel"
+    ],
+    "what_to_do": "Report repeated unprompted MFA requests to your SOC as an active credential spraying or MFA fatigue incident."
+  },
+  {
+    "id": "mod-04",
+    "title": "Social Engineering & Pretexting Awareness",
+    "category": "Social Engineering",
+    "icon": "users",
+    "what_is_it": "The psychological manipulation of individuals into performing actions or divulging confidential information through authority, fear, greed, or helpfulness.",
+    "why_matters": "Attackers target human psychology because it bypasses perimeter firewalls and encryption algorithms.",
+    "warning_signs": [
+      "Callers demanding immediate non-standard procedures under the guise of an executive",
+      "Tailgaters attempting to follow you through secure building access turnstiles",
+      "Requests to bypass standard purchase order or verification flows"
+    ],
+    "safe_practices": [
+      "Verify unusual requests via an out-of-band communication channel",
+      "Politely request visitor badges and escort unfamiliar guests",
+      "Follow standard organizational verification protocols without exceptions"
+    ],
+    "what_to_do": "Document details of the interaction and report the pretexting attempt to Corporate Security."
+  },
+  {
+    "id": "mod-05",
+    "title": "Safe Browsing & Web Threat Recognition",
+    "category": "Safe Browsing",
+    "icon": "globe",
+    "what_is_it": "Practices and controls designed to avoid malicious websites, drive-by downloads, malvertising, and deceptive web portals.",
+    "why_matters": "Web browsers interact with external untrusted content continuously, making them primary delivery vehicles for exploits and infostealers.",
+    "warning_signs": [
+      "Pop-ups claiming 'Your computer has 5 viruses! Call this number'",
+      "Suspicious file downloads (.scr, .bat, .iso) triggered without clicking download",
+      "Browser warning pages regarding expired or invalid SSL/TLS certificates"
+    ],
+    "safe_practices": [
+      "Keep browsers updated to the latest stable release",
+      "Enable browser sandboxing, enhanced tracking protection, and ad blocking",
+      "Do not bypass browser HTTPS certificate warning prompts"
+    ],
+    "what_to_do": "Close the suspect browser tab immediately, clear cache, and run an endpoint scan."
+  },
+  {
+    "id": "mod-06",
+    "title": "Secure Wi-Fi & Public Network Hygiene",
+    "category": "Wi-Fi",
+    "icon": "wifi",
+    "what_is_it": "Ensuring data transmissions are encrypted and protected against eavesdropping and evil-twin access points when working on untrusted networks.",
+    "why_matters": "Unencrypted or spoofed public hotspots allow attackers to intercept traffic, spoof DNS, or inject malicious payloads.",
+    "warning_signs": [
+      "Open public Wi-Fi networks with generic names ('Free_Airport_WiFi') requiring no password",
+      "Device prompting unexpected captive portals asking for social media credentials",
+      "Browser warnings about DNS redirects when joining hotel or cafe networks"
+    ],
+    "safe_practices": [
+      "Always connect through an enterprise or trusted VPN on public networks",
+      "Disable automatic Wi-Fi joining for open networks",
+      "Turn on WPA3 or WPA2-Enterprise for home and office networks"
+    ],
+    "what_to_do": "Disconnect immediately, forget the network, and turn on cellular hotspot."
+  },
+  {
+    "id": "mod-07",
+    "title": "Software Updates & Patch Management Awareness",
+    "category": "Vulnerabilities",
+    "icon": "refresh-cw",
+    "what_is_it": "The timely application of vendor security patches to operating systems, firmware, browsers, and enterprise applications.",
+    "why_matters": "Over 60% of network breaches exploit known vulnerabilities for which a patch was already released but delayed in deployment.",
+    "warning_signs": [
+      "Repeatedly dismissing 'System Restart to Update' reminders for weeks",
+      "Running deprecated or unsupported software versions (e.g., Windows 7, Python 2)",
+      "Unapproved third-party utilities downloaded without IT review"
+    ],
+    "safe_practices": [
+      "Enable automatic security updates for operating systems and key applications",
+      "Reboot workstations weekly to ensure patch installation finishes",
+      "Uninstall unused browser plugins and legacy tools"
+    ],
+    "what_to_do": "Report software requiring legacy compatibility to IT so compensating controls can be established."
+  },
+  {
+    "id": "mod-08",
+    "title": "Ransomware Defense & Extortion Awareness",
+    "category": "Ransomware",
+    "icon": "alert-octagon",
+    "what_is_it": "Ransomware is malicious software that encrypts an organization's files and exfiltrates proprietary data, demanding payment for decryption keys.",
+    "why_matters": "Ransomware attacks halt business operations, compromise patient care, and inflict severe financial and reputational losses.",
+    "warning_signs": [
+      "Mass file extensions changing unexpectedly (e.g., document.pdf.locked)",
+      "Files failing to open and unexpected README_RESTORE text files appearing on desktop",
+      "Endpoint fans running at maximum while CPU usage spikes from rapid disk operations"
+    ],
+    "safe_practices": [
+      "Maintain offline, immutable 3-2-1 backup copies of critical data",
+      "Enforce least-privilege permissions on shared network drives",
+      "Never disable endpoint protection or EDR agents"
+    ],
+    "what_to_do": "Immediately pull physical Ethernet cables and turn off Wi-Fi. Do not power down the machine (preserves volatile memory for forensics), notify SOC immediately."
+  },
+  {
+    "id": "mod-09",
+    "title": "Removable Media & USB Device Safety",
+    "category": "Physical Security",
+    "icon": "hard-drive",
+    "what_is_it": "Managing risks associated with USB flash drives, external hard disks, and malicious USB hardware (such as Rubber Ducky keystroke injectors).",
+    "why_matters": "Unattended USB drives dropped in parking lots or lobbies can bypass network firewalls via physical human curiosity.",
+    "warning_signs": [
+      "Finding an unlabeled USB drive in common areas, elevators, or conference rooms",
+      "Plugging in a flash drive and seeing unexpected command prompt windows flicker"
+    ],
+    "safe_practices": [
+      "Never insert unknown USB drives into work or personal computers",
+      "Hand discovered removable media directly to Corporate Physical Security",
+      "Use corporate cloud sharing repositories rather than thumb drives"
+    ],
+    "what_to_do": "If an unknown USB was inserted, disconnect machine from network immediately and inform the SOC."
+  },
+  {
+    "id": "mod-10",
+    "title": "Data Privacy & Sensitive Information Handling",
+    "category": "Data Exposure",
+    "icon": "lock",
+    "what_is_it": "Protecting Personally Identifiable Information (PII), intellectual property, and health records in accordance with regulations like GDPR and HIPAA.",
+    "why_matters": "Data exposure leads to regulatory fines, loss of customer trust, and weaponized extortion by threat groups.",
+    "warning_signs": [
+      "Exporting customer databases to unencrypted personal thumb drives or email accounts",
+      "Setting cloud storage buckets or shared folders to 'Public / Anyone with the link'",
+      "Pasting proprietary source code or customer data into public consumer AI tools"
+    ],
+    "safe_practices": [
+      "Classify and label sensitive information (Confidential, Restricted)",
+      "Encrypt sensitive data both in transit (TLS) and at rest (AES-256)",
+      "Adhere to organizational acceptable-use guidelines when using generative AI tools"
+    ],
+    "what_to_do": "Notify your Data Protection Officer (DPO) and security team within 24 hours of discovering unauthorized data exposure."
+  },
+  {
+    "id": "mod-11",
+    "title": "Mobile Device Security & App Hygiene",
+    "category": "Mobile Security",
+    "icon": "smartphone",
+    "what_is_it": "Securing smartphones and tablets that access corporate email, VPNs, and authentication tokens.",
+    "why_matters": "Mobile devices travel into untrusted environments daily and often store active session tokens for corporate clouds.",
+    "warning_signs": [
+      "Apps requesting unnecessary permissions (e.g., calculator app requesting contacts/SMS)",
+      "Unexpected rapid battery drain or high data consumption without usage",
+      "Prompts to install configuration profiles from third-party websites"
+    ],
+    "safe_practices": [
+      "Only install apps from official stores (Google Play, Apple App Store)",
+      "Enable biometric lock and automatic remote wipe after failed attempts",
+      "Keep mobile OS updated and never jailbreak/root devices used for work"
+    ],
+    "what_to_do": "Revoke suspicious app permissions and initiate a remote wipe if device is lost."
+  },
+  {
+    "id": "mod-12",
+    "title": "Remote Work & Home Office Security",
+    "category": "Remote Work",
+    "icon": "home",
+    "what_is_it": "Securing hybrid work environments that operate outside the corporate perimeter firewall.",
+    "why_matters": "Home routers and smart IoT devices often run outdated firmware, creating pivot opportunities for intruders.",
+    "warning_signs": [
+      "Leaving home Wi-Fi routers on default manufacturer admin passwords ('admin/admin')",
+      "Allowing family members or guests to use corporate-issued laptops",
+      "Leaving work screens unlocked when stepping away in public co-working spaces"
+    ],
+    "safe_practices": [
+      "Change default admin passwords on home routers and create a guest network for IoT",
+      "Lock computer screens (Win+L / Cmd+Ctrl+Q) whenever stepping away",
+      "Use privacy screens when working in coffee shops or airport lounges"
+    ],
+    "what_to_do": "Report any lost work laptop or unmonitored home network intrusion to your SOC immediately."
+  },
+  {
+    "id": "mod-13",
+    "title": "Cloud Account Security & Access Control",
+    "category": "Cloud Security",
+    "icon": "cloud",
+    "what_is_it": "Defending cloud identities, API keys, and administrative consoles in environments like AWS, Azure, and Google Cloud.",
+    "why_matters": "Cloud credentials committed to public code repositories can be harvested within minutes by automated adversary scrapers.",
+    "warning_signs": [
+      "Hardcoded API keys or secrets found in git commits or public repositories",
+      "Assigning broad Administrator privileges when read-only access is sufficient",
+      "Cloud accounts lacking mandatory MFA enforcement"
+    ],
+    "safe_practices": [
+      "Use secret managers and environment variables instead of hardcoded strings",
+      "Enforce Least Privilege and Role-Based Access Control (RBAC)",
+      "Review access logs and enable CloudTrail/Cloud Audit logs"
+    ],
+    "what_to_do": "Rotate compromised API keys immediately and invalidate existing session tokens."
+  },
+  {
+    "id": "mod-14",
+    "title": "Incident Reporting & SOC Escalation Protocol",
+    "category": "Incident Reporting",
+    "icon": "flag",
+    "what_is_it": "The structured process by which employees swiftly notify security teams of anomalies, mistakes, or suspicious observations.",
+    "why_matters": "Early reporting dramatically shortens the dwell time of attackers, often turning a catastrophic breach into a minor contained event.",
+    "warning_signs": [
+      "Hesitating to report a clicked phishing link out of fear of disciplinary retribution",
+      "Attempting to manually clean malware or delete suspicious logs without notifying SOC"
+    ],
+    "safe_practices": [
+      "Embrace a blameless reporting culture: rapid reporting protects the whole organization",
+      "Know the emergency SOC contact hotline, email, and internal chat channel",
+      "Preserve evidence: take photos of error messages, note timestamps, and do not reboot"
+    ],
+    "what_to_do": "Contact the SOC within 15 minutes of an anomaly: state What happened, When, and on Which device."
+  },
+  {
+    "id": "mod-15",
+    "title": "AI-Enabled Scam & Deepfake Awareness",
+    "category": "Social Engineering",
+    "icon": "cpu",
+    "what_is_it": "Recognizing modern threats powered by generative artificial intelligence, including voice cloning, deepfake video calls, and hyper-personalized spear-phishing.",
+    "why_matters": "AI tools allow adversaries to generate grammatically flawless lures and clone executive voices in real time.",
+    "warning_signs": [
+      "An urgent phone call from an executive or relative demanding immediate wire transfer with slight audio artifacts",
+      "Video call participant whose facial expressions or lip sync appear unnatural or glitch when turning their head",
+      "Emails referencing obscure personal trivia extracted from social media scraping"
+    ],
+    "safe_practices": [
+      "Establish pre-agreed verbal safe words or out-of-band verification procedures for financial transactions",
+      "Ask the caller unexpected challenge questions that only the authentic person would know",
+      "Never bypass Dual-Authorization financial controls based on verbal or video requests alone"
+    ],
+    "what_to_do": "Hang up, verify via a secondary direct channel, and inform the Security Operations Center."
+  }
+]

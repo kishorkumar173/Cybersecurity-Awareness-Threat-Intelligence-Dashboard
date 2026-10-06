@@ -1,0 +1,418 @@
+[
+  {
+    "id": 1,
+    "category": "Phishing",
+    "question": "You receive an unexpected email from 'IT Support' stating that your mailbox is 99% full and will be deleted in 2 hours unless you click a link to verify credentials. What is the safest response?",
+    "options": [
+      "Click the link immediately to prevent mailbox deletion",
+      "Reply to the email with your username and password",
+      "Do not click the link; verify through your official IT helpdesk channel and report the email",
+      "Forward the email to all colleagues to warn them"
+    ],
+    "correct_answer": 2,
+    "explanation": "Urgency and threats of account closure are classic phishing lures designed to prompt impulsive action. Verifying out-of-band and reporting to the SOC protects both you and the organization."
+  },
+  {
+    "id": 2,
+    "category": "Phishing",
+    "question": "Which of the following sender email addresses is most suspicious for an alleged communication from PayPal?",
+    "options": [
+      "service@paypal.com",
+      "billing-support@paypal-security-update.invalid",
+      "noreply@mail.paypal.com",
+      "customer-service@paypal.com"
+    ],
+    "correct_answer": 1,
+    "explanation": "The domain 'paypal-security-update.invalid' is not the legitimate 'paypal.com' domain. Attackers frequently register lookalike domains containing trusted keywords."
+  },
+  {
+    "id": 3,
+    "category": "Phishing",
+    "question": "What is 'Quishing' in modern cybersecurity?",
+    "options": [
+      "Phishing over quantum computing networks",
+      "Phishing that embeds deceptive QR codes in emails or physical posters to redirect victims to malicious web portals",
+      "Quick automated vulnerability scanning",
+      "A fast SQL injection technique"
+    ],
+    "correct_answer": 1,
+    "explanation": "Quishing refers to QR-code based phishing. Deceptive QR codes bypass traditional email text scanners and prompt users to scan with unmonitored mobile devices."
+  },
+  {
+    "id": 4,
+    "category": "Passwords",
+    "question": "Which password practice offers the strongest balance of defensive strength and usability?",
+    "options": [
+      "A 7-character password changed every 14 days",
+      "A memorable 4-word passphrase (e.g., 'sunset-coffee-vintage-beacon') managed with a password manager",
+      "Using the same 14-character password across all accounts so you don't forget it",
+      "Writing passwords in a hidden notebook near your desk"
+    ],
+    "correct_answer": 1,
+    "explanation": "Long passphrases have exponential entropy against brute-force attacks, and password managers allow unique credentials across all accounts without memorization fatigue."
+  },
+  {
+    "id": 5,
+    "category": "Passwords",
+    "question": "Why is password reuse across multiple services dangerous?",
+    "options": [
+      "It slows down computer processing speed",
+      "If one service suffers a breach, adversaries use automated credential stuffing to compromise all your accounts",
+      "It invalidates your operating system license",
+      "It causes browser cookie corruption"
+    ],
+    "correct_answer": 1,
+    "explanation": "Credential stuffing exploits password reuse: breach dumps from one site are tested automatically against hundreds of banks, email services, and cloud platforms."
+  },
+  {
+    "id": 6,
+    "category": "Passwords",
+    "question": "What are FIDO2 Passkeys designed to achieve?",
+    "options": [
+      "Make passwords shorter",
+      "Provide cryptographic, phishing-resistant authentication that replaces shared password secrets with public-key pairs bound to domain origins",
+      "Allow automatic logins from any public terminal",
+      "Share passwords securely over email"
+    ],
+    "correct_answer": 1,
+    "explanation": "Passkeys use public-key cryptography bound to the authentic domain origin, rendering credential-harvesting phishing sites completely ineffective."
+  },
+  {
+    "id": 7,
+    "category": "MFA",
+    "question": "You receive multiple unprompted Push notifications on your phone asking you to 'Approve Login'. What should you do?",
+    "options": [
+      "Tap Approve so the notifications stop interrupting your work",
+      "Deny the request immediately and report the incident to the SOC as potential MFA fatigue / credential spray",
+      "Turn off your phone and do nothing",
+      "Send a screenshot of the prompt to an open social media chat"
+    ],
+    "correct_answer": 1,
+    "explanation": "This is an MFA fatigue attack: the adversary already has your password and is trying to annoy or trick you into approving access. Denying and reporting alerts the SOC."
+  },
+  {
+    "id": 8,
+    "category": "MFA",
+    "question": "Which Multi-Factor Authentication method is considered least vulnerable to adversary-in-the-middle phishing?",
+    "options": [
+      "SMS text message codes",
+      "Voice call automated codes",
+      "Hardware security keys (FIDO2 / WebAuthn)",
+      "Email one-time passwords"
+    ],
+    "correct_answer": 2,
+    "explanation": "FIDO2 hardware keys cryptographically verify the server domain, making it impossible for a reverse proxy phishing site to intercept usable credentials."
+  },
+  {
+    "id": 9,
+    "category": "MFA",
+    "question": "A person calling your desk claims to be an IT network engineer and asks you to read aloud the 6-digit code just texted to your phone. What should you do?",
+    "options": [
+      "Read the code to them since they are from IT",
+      "Never share the one-time code with anyone; hang up and contact IT support using an official directory number",
+      "Text the code back to the sender number",
+      "Ask them to call back in 10 minutes"
+    ],
+    "correct_answer": 1,
+    "explanation": "Legitimate IT staff will never ask for your temporary MFA codes. This is a common pretexting tactic to hijack an active authentication session."
+  },
+  {
+    "id": 10,
+    "category": "Social Engineering",
+    "question": "What is 'Pretexting' in social engineering?",
+    "options": [
+      "Typing code into a terminal before running tests",
+      "Creating an invented scenario (pretext) to persuade a targeted individual to release information or perform an unauthorized action",
+      "Sending text messages before making a phone call",
+      "Configuring email security records"
+    ],
+    "correct_answer": 1,
+    "explanation": "Pretexting involves building a false narrative (e.g., impersonating an auditor or vendor) to gain trust and extract sensitive data."
+  },
+  {
+    "id": 11,
+    "category": "Social Engineering",
+    "question": "An unknown individual carrying large delivery boxes rushes behind you as you swipe your badge into a secure office entrance. What is this called and what should you do?",
+    "options": [
+      "Quishing; hold the door open politely",
+      "Tailgating / Piggybacking; politely ask them to badge in themselves or escort them to reception",
+      "Credential Stuffing; ignore them completely",
+      "Man-in-the-middle; run inside"
+    ],
+    "correct_answer": 1,
+    "explanation": "Tailgating bypasses physical access controls by exploiting politeness. Security policy requires every person to present their own badge."
+  },
+  {
+    "id": 12,
+    "category": "Social Engineering",
+    "question": "You receive a voice call that sounds exactly like your Chief Financial Officer urgently requesting a confidential wire transfer to an unknown account. How should you react?",
+    "options": [
+      "Wire the money immediately due to executive priority",
+      "Recognize the potential for AI voice cloning, pause the transfer, and verify through established dual-control authorization channels",
+      "Reply with corporate bank statements over SMS",
+      "Post about it on LinkedIn"
+    ],
+    "correct_answer": 1,
+    "explanation": "Generative AI allows attackers to clone executive voices with short audio samples. Financial transactions must always follow strict out-of-band dual controls."
+  },
+  {
+    "id": 13,
+    "category": "Safe Browsing",
+    "question": "When browsing the web, a pop-up displays: 'Your Windows System is Infected! Call 1-800-XXX-XXXX immediately'. What should you do?",
+    "options": [
+      "Call the number immediately to get help",
+      "Download the recommended antivirus utility from the pop-up",
+      "Close the browser tab/process; do not call the number or download any files as it is a tech-support scam",
+      "Enter your credit card number to pay for cleaning"
+    ],
+    "correct_answer": 2,
+    "explanation": "Browser pop-ups cannot diagnose local operating system infections. These are scareware tech-support scams seeking remote access and payment."
+  },
+  {
+    "id": 14,
+    "category": "Safe Browsing",
+    "question": "What does a browser warning stating 'Your connection is not private / Invalid Certificate' typically signify?",
+    "options": [
+      "The computer battery is low",
+      "The site's SSL/TLS certificate is expired, misconfigured, or someone is attempting an interception on your network",
+      "You have downloaded too many files",
+      "Your screen brightness is incorrectly calibrated"
+    ],
+    "correct_answer": 1,
+    "explanation": "Invalid certificates mean encrypted communication cannot be authenticated, exposing sessions to eavesdropping or man-in-the-middle manipulation."
+  },
+  {
+    "id": 15,
+    "category": "Safe Browsing",
+    "question": "What is 'Drive-by Download'?",
+    "options": [
+      "Downloading files while driving a car",
+      "Unintended download and execution of software that occurs when a user merely visits a compromised web page",
+      "A fast torrent download protocol",
+      "Downloading software over satellite internet"
+    ],
+    "correct_answer": 1,
+    "explanation": "Drive-by downloads exploit browser vulnerabilities or weaponized scripts without explicit user consent or clicking."
+  },
+  {
+    "id": 16,
+    "category": "Wi-Fi",
+    "question": "Why is conducting corporate or financial tasks over an open, unencrypted airport Wi-Fi without a VPN risky?",
+    "options": [
+      "It permanently degrades the device antenna",
+      "Anyone nearby on the same radio frequency can inspect or manipulate unencrypted packets and attempt DNS spoofing",
+      "The airport authority will bill your mobile phone plan",
+      "It triggers automatic disk defragmentation"
+    ],
+    "correct_answer": 1,
+    "explanation": "Open Wi-Fi has no link-layer encryption, enabling packet eavesdropping, rogue access points (Evil Twins), and session hijacking without a trusted VPN."
+  },
+  {
+    "id": 17,
+    "category": "Wi-Fi",
+    "question": "What is an 'Evil Twin' Wi-Fi access point?",
+    "options": [
+      "A router manufactured with two antennas",
+      "A fraudulent Wi-Fi hotspot set up by an attacker that mimics the SSID name of a legitimate trusted network to intercept victim traffic",
+      "A broken Wi-Fi cable",
+      "A network that runs on 5GHz instead of 2.4GHz"
+    ],
+    "correct_answer": 1,
+    "explanation": "An Evil Twin mimics legitimate network names (e.g., 'Hotel_Guest_Free') so victim devices connect automatically, allowing the adversary to man-in-the-middle traffic."
+  },
+  {
+    "id": 18,
+    "category": "Ransomware",
+    "question": "What is the primary operational objective of a defensive 3-2-1 backup strategy in ransomware resilience?",
+    "options": [
+      "To back up files every 3 minutes, 2 hours, and 1 day",
+      "Keep 3 copies of data, across 2 different storage media types, with at least 1 copy held offline/immutable offsite",
+      "Encrypt files using 3 keys, 2 algorithms, and 1 password",
+      "Delete old files 3 times a year"
+    ],
+    "correct_answer": 1,
+    "explanation": "The 3-2-1 backup rule ensures that even if ransomware encrypts local and connected network shares, an isolated offline or immutable copy guarantees recovery."
+  },
+  {
+    "id": 19,
+    "category": "Ransomware",
+    "question": "If you observe files on your workstation rapidly changing extensions to '.locked' and ransom notes appearing, what is the immediate first defensive action?",
+    "options": [
+      "Pay the ransom using personal cryptocurrency",
+      "Disconnect the device from all networks (unplug Ethernet, disconnect Wi-Fi) immediately to halt lateral spread, but keep power on for memory forensics",
+      "Restart the computer five times",
+      "Email the attacker asking for a discount"
+    ],
+    "correct_answer": 1,
+    "explanation": "Isolating network connectivity stops the malware from spreading laterally or completing network file share encryption, while preserving volatile RAM forensics."
+  },
+  {
+    "id": 20,
+    "category": "Ransomware",
+    "question": "What is 'Double Extortion' in modern ransomware attacks?",
+    "options": [
+      "Charging double the ransom fee if payment is delayed",
+      "Both encrypting systems to halt operations and stealing sensitive proprietary data to threaten public leak if ransom is unpaid",
+      "Attacking two computers simultaneously",
+      "Ransomware that encrypts both hard drives and flash drives"
+    ],
+    "correct_answer": 1,
+    "explanation": "Double extortion pairs operational disruption (encryption) with regulatory and reputational leverage (threatening public exposure of stolen data)."
+  },
+  {
+    "id": 21,
+    "category": "Privacy",
+    "question": "What is Personally Identifiable Information (PII)?",
+    "options": [
+      "Public network IP addresses",
+      "Information that can be used alone or in conjunction with other data to identify, contact, or locate a specific individual",
+      "Computer processor identification serial numbers",
+      "Open source software licensing terms"
+    ],
+    "correct_answer": 1,
+    "explanation": "PII includes Social Security numbers, dates of birth, biometric records, medical data, and personal contact details requiring legal protection."
+  },
+  {
+    "id": 22,
+    "category": "Privacy",
+    "question": "Why should employees avoid pasting proprietary source code or confidential company data into unapproved public generative AI tools?",
+    "options": [
+      "It makes the AI model run slower",
+      "Public AI platforms may ingest and store prompt data for future model training, potentially exposing proprietary assets to third parties",
+      "It consumes too much electrical power",
+      "It alters the spelling of code variables"
+    ],
+    "correct_answer": 1,
+    "explanation": "Unvetted consumer AI tools may retain input prompts, violating confidentiality agreements and risking exposure in future model outputs."
+  },
+  {
+    "id": 23,
+    "category": "Mobile Security",
+    "question": "A freshly downloaded smartphone calculator app requests permissions for Contacts, Microphone, SMS, and Location. What is the most prudent action?",
+    "options": [
+      "Grant all permissions so the app doesn't crash",
+      "Deny the invasive permissions and uninstall the app; basic calculators do not require access to private data",
+      "Turn off the screen and restart",
+      "Buy a new phone"
+    ],
+    "correct_answer": 1,
+    "explanation": "Overprivileged applications frequently operate as spyware or adware harvesting personal device data without legitimate functional need."
+  },
+  {
+    "id": 24,
+    "category": "Mobile Security",
+    "question": "Why is 'jailbreaking' or 'rooting' a mobile device used for work prohibited in enterprise environments?",
+    "options": [
+      "It voids the exterior color finish",
+      "It removes built-in operating system security sandboxes, leaving apps vulnerable to privilege escalation and data theft",
+      "It prevents phone calls from connecting",
+      "It disables the charging port"
+    ],
+    "correct_answer": 1,
+    "explanation": "Rooting eliminates the OS security boundary, allowing untrusted apps to bypass permissions, access keychain tokens, and steal corporate data."
+  },
+  {
+    "id": 25,
+    "category": "Incident Reporting",
+    "question": "You accidentally clicked a suspicious email link and entered your corporate credentials 10 minutes ago. What should you do?",
+    "options": [
+      "Keep quiet and hope nothing bad happens",
+      "Immediately report the mistake to your SOC / IT Security team; blameless, rapid reporting allows defenders to revoke tokens before damage occurs",
+      "Wait 7 days to see if someone contacts you",
+      "Format your computer yourself without telling anyone"
+    ],
+    "correct_answer": 1,
+    "explanation": "Adversary dwell time is critical. Timely reporting allows defenders to invalidate session cookies, revoke refresh tokens, and isolate threats before compromise escalates."
+  },
+  {
+    "id": 26,
+    "category": "Incident Reporting",
+    "question": "In the standard NIST incident response lifecycle, what are the primary phases in order?",
+    "options": [
+      "Attack, Panic, Pay, Recover",
+      "Preparation, Detection & Analysis, Containment, Eradication, Recovery, Post-Incident Activity (Lessons Learned)",
+      "Scan, Breach, Deny, Settle",
+      "Download, Run, Inspect, Delete"
+    ],
+    "correct_answer": 1,
+    "explanation": "NIST SP 800-61 defines Preparation, Detection & Analysis, Containment, Eradication, Recovery, and Post-Incident Activity as the defensive response cycle."
+  },
+  {
+    "id": 27,
+    "category": "Physical Security",
+    "question": "You find an unlabeled black USB thumb drive in the parking lot outside your corporate headquarters. What should you do?",
+    "options": [
+      "Plug it into your workstation to see whose family pictures are on it",
+      "Hand it over directly to Physical Security or the SOC without plugging it in anywhere",
+      "Plug it into a colleague's computer to be safe",
+      "Throw it into a regular trash can"
+    ],
+    "correct_answer": 1,
+    "explanation": "Dropping malicious USB drives is a classic physical penetration tactic (USB drop attack). Removable media can execute keystrokes or drop malware upon insertion."
+  },
+  {
+    "id": 28,
+    "category": "Cloud Security",
+    "question": "What is the Principle of Least Privilege in access control?",
+    "options": [
+      "Giving all users full administrator rights so they can complete tasks without tickets",
+      "Granting users and service accounts only the minimum permissions necessary to perform their legitimate job responsibilities",
+      "Only allowing access from desktop computers",
+      "Restricting logins to 1 hour per day"
+    ],
+    "correct_answer": 1,
+    "explanation": "Least privilege limits the potential blast radius if a user account or service credential becomes compromised."
+  },
+  {
+    "id": 29,
+    "category": "Vulnerabilities",
+    "question": "What is the key difference between a 'Vulnerability' and an 'Exploit'?",
+    "options": [
+      "They are identical terms",
+      "A vulnerability is a weakness or flaw in software; an exploit is code or technique used by an actor to take advantage of that flaw",
+      "An exploit is a security patch and a vulnerability is a firewall",
+      "A vulnerability is a hardware failure and an exploit is an email"
+    ],
+    "correct_answer": 1,
+    "explanation": "A vulnerability is an existing structural flaw or bug. An exploit is the specific weaponization used to trigger and abuse that flaw."
+  },
+  {
+    "id": 30,
+    "category": "Social Engineering",
+    "question": "What is 'Vishing'?",
+    "options": [
+      "Visual phishing using video screens",
+      "Voice phishing: phone calls where attackers impersonate trusted figures to steal data or authorize fraudulent requests",
+      "Virus phishing through computer networks",
+      "Vulnerability hunting in software"
+    ],
+    "correct_answer": 1,
+    "explanation": "Vishing combines 'voice' and 'phishing', referring to phone calls exploiting urgency, authority, or deception."
+  },
+  {
+    "id": 31,
+    "category": "Phishing",
+    "question": "Why is hovering your cursor over a hyperlink in an email before clicking recommended?",
+    "options": [
+      "It speeds up page loading",
+      "It allows you to preview the actual destination URL in the status bar to verify if it matches the text displayed",
+      "It deletes malicious scripts automatically",
+      "It activates an encrypted VPN tunnel"
+    ],
+    "correct_answer": 1,
+    "explanation": "Hyperlink display text can show a benign destination (e.g. 'https://bank.com') while the underlying href links to an attacker-controlled domain."
+  },
+  {
+    "id": 32,
+    "category": "Safe Browsing",
+    "question": "What does the 'HTTPS' lock icon in a browser address bar guarantee?",
+    "options": [
+      "The website is 100% trustworthy and will never steal your credentials",
+      "The connection between your browser and the web server is encrypted in transit; it does NOT guarantee the site operator is benign",
+      "The website is owned by the federal government",
+      "Your computer is immune to all malware"
+    ],
+    "correct_answer": 1,
+    "explanation": "HTTPS only guarantees transmission encryption and domain certificate validity. Adversaries frequently host phishing sites with valid HTTPS certificates."
+  }
+]

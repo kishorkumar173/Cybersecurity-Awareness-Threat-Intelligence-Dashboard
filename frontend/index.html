@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybersecurity Awareness & Threat Intelligence Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🛡️</div>
+      <div>
+        <div class="brand-title">CYBER INTEL &amp; AWARENESS</div>
+        <div style="font-size:0.68rem; color:#8b949e;">Unified Defensive SOC &amp; Education Platform</div>
+      </div>
+      <span class="brand-badge">DEFENSIVE ONLY</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link active">SOC Dashboard</a></li>
+      <li><a href="threat-dashboard.html" class="nav-link">Threat Repository</a></li>
+      <li><a href="awareness.html" class="nav-link">Awareness Center</a></li>
+      <li><a href="quiz.html" class="nav-link">Security Quiz</a></li>
+    </ul>
+  </nav>
+
+  <!-- Core Content Container -->
+  <main class="container">
+
+    <!-- Crucial Defensive Taxonomy Distinction Banner -->
+    <div class="callout-box">
+      <div style="font-size:1.4rem;">💡</div>
+      <div>
+        <strong>Defensive Distinction Principle:</strong>
+        <span style="color:#cbd5e1;">
+          OBSERVATION (raw sensor hit) &rarr; INDICATOR (syntactically normalized artifact) &rarr; ALERT (scored triage candidate) &rarr; THREAT (contextualized risk) &rarr; INCIDENT (confirmed adverse event).
+          <em style="color:#f43f5e;">An indicator match does NOT equal a confirmed compromise.</em>
+        </span>
+      </div>
+    </div>
+
+    <!-- Top Statistical Metric Cards -->
+    <section class="stat-grid">
+      <div class="stat-card accent-violet">
+        <div class="stat-label">Total Threat Records</div>
+        <div class="stat-value" id="statTotalThreats">0</div>
+        <div class="stat-subtext">Telemetry in Local Store</div>
+      </div>
+      <div class="stat-card accent-coral">
+        <div class="stat-label">Critical Threats</div>
+        <div class="stat-value" id="statCriticalThreats" style="color:var(--coral);">0</div>
+        <div class="stat-subtext">Immediate Triage</div>
+      </div>
+      <div class="stat-card accent-amber">
+        <div class="stat-label">High Severity</div>
+        <div class="stat-value" id="statHighThreats" style="color:var(--amber);">0</div>
+        <div class="stat-subtext">Active Monitoring</div>
+      </div>
+      <div class="stat-card accent-emerald">
+        <div class="stat-label">Active Indicators</div>
+        <div class="stat-value" id="statActiveIndicators" style="color:var(--emerald);">0</div>
+        <div class="stat-subtext">IP, Domain, URL, Hash, CVE</div>
+      </div>
+      <div class="stat-card accent-teal">
+        <div class="stat-label">Open Investigations</div>
+        <div class="stat-value" id="statOpenInvestigations" style="color:var(--teal);">0</div>
+        <div class="stat-subtext">SOC Alerts Queue</div>
+      </div>
+      <div class="stat-card accent-violet">
+        <div class="stat-label">Avg Confidence</div>
+        <div class="stat-value" id="statAvgConfidence">0%</div>
+        <div class="stat-subtext">Analytical Rigor</div>
+      </div>
+      <div class="stat-card accent-emerald">
+        <div class="stat-label">Tracked CVEs</div>
+        <div class="stat-value" id="statVulnsTracked">0</div>
+        <div class="stat-subtext">Defensive Awareness</div>
+      </div>
+    </section>
+
+    <!-- Rapid IOC Defensive Search Engine -->
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>🔍</span> Defensive Indicator of Compromise (IOC) Search
+        </div>
+        <span class="panel-title-badge">OFFLINE LOOKUP ONLY</span>
+      </div>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:14px;">
+        Perform a strictly safe, non-intrusive lookup against internal threat intelligence. 
+        <strong>Safety Guarantee:</strong> Search queries are parsed as data; external networks or suspicious IPs are never contacted.
+      </p>
+      <div class="search-container">
+        <div class="search-input-wrap">
+          <span class="search-icon-placeholder">&#9881;</span>
+          <input type="text" id="iocSearchInput" class="search-input" placeholder="Enter IP (e.g. 198.51.100.25), Domain (login-check.invalid), Hash, or CVE..." value="198.51.100.25">
+        </div>
+        <button class="btn btn-emerald" onclick="performIocSearch()">Analyze Indicator</button>
+      </div>
+      <div id="iocSearchResult" style="display:none;"></div>
+    </section>
+
+    <!-- SOC Visual Analytics Charts (Emerald, Violet, Coral, Amber Palettes) -->
+    <section class="charts-grid">
+      <div class="chart-box">
+        <div class="chart-box-header">
+          <div class="chart-box-title">Threat Categories Breakdown</div>
+          <div class="chart-box-sub">Distribution across 10 defensive domains</div>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas id="chartCategory"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-box-header">
+          <div class="chart-box-title">Threat Severity Tiers</div>
+          <div class="chart-box-sub">Normalized defensive severity classifications</div>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas id="chartSeverity"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-box-header">
+          <div class="chart-box-title">IOC Type Composition</div>
+          <div class="chart-box-sub">Network, host, web, and vulnerability indicators</div>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas id="chartIocType"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-box-header">
+          <div class="chart-box-title">MITRE ATT&CK Tactics Alignment</div>
+          <div class="chart-box-sub">Adversary behavior mapping where evidence is justified</div>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas id="chartAttackTactics"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Threat Telemetry Feed -->
+    <section class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>📡</span> Live Ingested Defensive Threat Feed
+        </div>
+        <a href="threat-dashboard.html" class="btn btn-outline" style="font-size:0.75rem;">Explore Full Repository &rarr;</a>
+      </div>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Threat ID</th>
+              <th>Threat Name</th>
+              <th>Category</th>
+              <th>Indicator Value</th>
+              <th>Severity</th>
+              <th>Risk Score</th>
+              <th>Confidence</th>
+              <th>Status</th>
+              <th>Last Seen</th>
+            </tr>
+          </thead>
+          <tbody id="recentThreatsBody">
+            <tr><td colspan="9" style="text-align:center; color:#8b949e;">Loading telemetry feed...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Executive Defensive Priorities & Hygiene Brief -->
+    <section class="panel" style="background:linear-gradient(180deg, #1f242c 0%, #171b22 100%);">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>📋</span> Executive Cybersecurity Summary
+        </div>
+        <span class="panel-title-badge">CISO &amp; MANAGEMENT VIEW</span>
+      </div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px; font-size:0.88rem; color:#cbd5e1;">
+        <div style="background:var(--bg-secondary); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+          <h4 style="color:#10b981; margin-bottom:8px;">Threat Landscape Assessment</h4>
+          <p>Recent synthetic ingestion signals a surge in credential phishing and session hijacking simulations. Risk is predominantly concentrated at initial access boundaries.</p>
+        </div>
+        <div style="background:var(--bg-secondary); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+          <h4 style="color:#8b5cf6; margin-bottom:8px;">Vulnerability Exposure Posture</h4>
+          <p>Prioritize edge-facing services over isolated internal environments. CVSS 9.8 flaws in non-routable test networks require standard scheduling, whereas internet-facing flaws require 24h remediation.</p>
+        </div>
+        <div style="background:var(--bg-secondary); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+          <h4 style="color:#f59e0b; margin-bottom:8px;">Human Defense Preparedness</h4>
+          <p>Phishing recognition and MFA fatigue defense represent the highest-leverage controls. Encourage continuous micro-learning modules rather than punitive scoring.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div><strong>Cybersecurity Awareness &amp; Threat Intelligence Dashboard</strong> &mdash; Industry Defensive Architecture</div>
+    <div class="footer-disclaimer">
+      This platform is built exclusively for defensive cybersecurity education, telemetry correlation, and security awareness. 
+      It operates in strict compliance with defensive engineering standards using sanitized, synthetic indicators and never executes malicious payloads or contacts external targets.
+    </div>
+  </footer>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

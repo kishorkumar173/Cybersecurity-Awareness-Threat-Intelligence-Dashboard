@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Awareness Quiz &amp; Knowledge Assessment</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">📝</div>
+      <div>
+        <div class="brand-title">CYBER INTEL &amp; AWARENESS</div>
+        <div style="font-size:0.68rem; color:#8b949e;">Security Awareness Knowledge Assessment</div>
+      </div>
+      <span class="brand-badge">EDUCATIONAL ASSESSMENT</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">SOC Dashboard</a></li>
+      <li><a href="threat-dashboard.html" class="nav-link">Threat Repository</a></li>
+      <li><a href="awareness.html" class="nav-link">Awareness Center</a></li>
+      <li><a href="quiz.html" class="nav-link active">Security Quiz</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+
+    <div class="panel-header" style="border:none; margin-bottom:12px;">
+      <div>
+        <h2 style="font-size:1.6rem; color:#fff;">Interactive Defensive Cybersecurity Quiz</h2>
+        <p style="color:var(--text-muted); font-size:0.88rem; margin-top:4px;">
+          Test your defensive instincts across 32 realistic enterprise scenarios. Receive category-specific performance metrics and personalized micro-learning recommendations.
+        </p>
+      </div>
+    </div>
+
+    <!-- Quiz Results View (Initially Hidden) -->
+    <div id="quizResultView" class="panel" style="display:none; border-color:var(--emerald);">
+      <div style="text-align:center; padding:20px 0;">
+        <div style="font-size:0.85rem; text-transform:uppercase; color:#8b949e; letter-spacing:1px;">OVERALL AWARENESS SCORE</div>
+        <div id="scoreNumber" style="font-size:3.5rem; font-weight:800; color:var(--emerald); line-height:1.2;">0%</div>
+        <div id="scoreClassification" style="font-size:1.2rem; font-weight:600; color:#fff; margin-top:4px;">-</div>
+        <div style="font-size:0.8rem; color:#8b949e; max-width:600px; margin:8px auto 0;">
+          Educational assessment score. Highlights human defense readiness across key cyber risk vectors.
+        </div>
+      </div>
+
+      <!-- Personalized Learning Recommendations -->
+      <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border-subtle);">
+        <h3 style="font-size:1.1rem; color:#fff; margin-bottom:12px;">Personalized Micro-Learning Recommendations</h3>
+        <div id="recommendationsList" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:12px;"></div>
+      </div>
+
+      <!-- Category Breakdown Grid -->
+      <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border-subtle);">
+        <h3 style="font-size:1.1rem; color:#fff; margin-bottom:12px;">Vector Mastery Breakdown</h3>
+        <div id="categoryGrid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;"></div>
+      </div>
+
+      <div style="text-align:center; margin-top:28px;">
+        <button class="btn btn-outline" onclick="resetQuiz()">Retake Quiz</button>
+        <a href="awareness.html" class="btn btn-violet" style="margin-left:12px;">Open Learning Center</a>
+      </div>
+    </div>
+
+    <!-- Quiz Question Form -->
+    <form id="quizForm" onsubmit="submitQuiz(event)">
+      <div id="questionsContainer">
+        <div style="text-align:center; color:#8b949e; padding:40px;">Loading quiz scenarios...</div>
+      </div>
+
+      <div style="text-align:center; margin:30px 0;">
+        <button type="submit" class="btn btn-emerald" style="padding:14px 32px; font-size:1.05rem;">
+          Submit Assessment &amp; Generate Score
+        </button>
+      </div>
+    </form>
+
+  </main>
+
+  <footer>
+    <div><strong>Cybersecurity Awareness &amp; Threat Intelligence Dashboard</strong> &mdash; Industry Defensive Architecture</div>
+  </footer>
+
+  <script>
+    let questionsData = [];
+
+    async function loadQuestions() {
+      try {
+        const res = await fetch("/api/quiz");
+        const data = await res.json();
+        questionsData = data.questions || [];
+        renderQuestions(questionsData);
+      } catch (e) {
+        console.error("Failed to load quiz:", e);
+      }
+    }
+
+    function renderQuestions(questions) {
+      const c = document.getElementById("questionsContainer");
+      c.innerHTML = "";
+
+      questions.forEach((q, idx) => {
+        const div = document.createElement("div");
+        div.className = "quiz-card";
+        div.innerHTML = `
+          <div class="quiz-header">
+            <span>QUESTION ${idx + 1} OF ${questions.length}</span>
+            <span class="badge badge-category">${q.category}</span>
+          </div>
+          <div class="quiz-question-title">${q.question}</div>
+          <div class="options-wrap">
+            ${q.options.map((opt, oIdx) => `
+              <label class="option-label">
+                <input type="radio" name="q_${q.id}" value="${oIdx}">
+                <span style="font-size:0.9rem; color:#cbd5e1;">${opt}</span>
+              </label>
+            `).join("")}
+          </div>
+        `;
+        c.appendChild(div);
+      });
+    }
+
+    async function submitQuiz(e) {
+      e.preventDefault();
+      const answers = {};
+      questionsData.forEach(q => {
+        const selected = document.querySelector(`input[name="q_${q.id}"]:checked`);
+        if (selected) {
+          answers[q.id] = parseInt(selected.value, 10);
+        }
+      });
+
+      const answeredCount = Object.keys(answers).length;
+      if (answeredCount < questionsData.length) {
+        if (!confirm(`You have answered ${answeredCount} of ${questionsData.length} questions. Submit anyway?`)) {
+          return;
+        }
+      }
+
+      try {
+        const res = await fetch("/api/quiz/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ answers: answers })
+        });
+        const result = await res.json();
+        showResults(result);
+      } catch (err) {
+        alert("Error submitting quiz: " + err.message);
+      }
+    }
+
+    function showResults(data) {
+      document.getElementById("quizForm").style.display = "none";
+      const rv = document.getElementById("quizResultView");
+      rv.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      document.getElementById("scoreNumber").textContent = `${data.overall_score}%`;
+      document.getElementById("scoreClassification").textContent = data.classification;
+
+      // Color score
+      const numEl = document.getElementById("scoreNumber");
+      if (data.overall_score >= 80) numEl.style.color = "#10b981";
+      else if (data.overall_score >= 60) numEl.style.color = "#8b5cf6";
+      else if (data.overall_score >= 40) numEl.style.color = "#f59e0b";
+      else numEl.style.color = "#f43f5e";
+
+      // Recommendations
+      const rContainer = document.getElementById("recommendationsList");
+      rContainer.innerHTML = "";
+      if (!data.recommendations || data.recommendations.length === 0) {
+        rContainer.innerHTML = `<div style="color:#10b981; font-size:0.85rem;">🎉 Outstanding awareness performance across all assessed security domains!</div>`;
+      } else {
+        data.recommendations.forEach(r => {
+          const d = document.createElement("div");
+          d.style = "background:var(--bg-secondary); border-left:3px solid var(--amber); padding:10px; border-radius:4px; font-size:0.82rem;";
+          d.innerHTML = `<strong style="color:#fbbf24;">${r.category} (${r.score}%)</strong><div style="color:#cbd5e1; margin-top:2px;">${r.recommendation}</div>`;
+          rContainer.appendChild(d);
+        });
+      }
+
+      // Categories
+      const cGrid = document.getElementById("categoryGrid");
+      cGrid.innerHTML = "";
+      for (const [cat, stats] of Object.entries(data.category_breakdown || {})) {
+        const d = document.createElement("div");
+        d.style = "background:var(--bg-secondary); padding:12px; border-radius:4px; border:1px solid var(--border-subtle);";
+        d.innerHTML = `
+          <div style="font-size:0.75rem; color:#8b949e; text-transform:uppercase;">${cat}</div>
+          <div style="font-size:1.2rem; font-weight:700; color:#fff; margin:4px 0;">${stats.score}%</div>
+          <div style="font-size:0.72rem; color:#6e7681;">${stats.correct} / ${stats.total} correct</div>
+        `;
+        cGrid.appendChild(d);
+      }
+    }
+
+    function resetQuiz() {
+      document.getElementById("quizResultView").style.display = "none";
+      document.getElementById("quizForm").reset();
+      document.getElementById("quizForm").style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadQuestions);
+  </script>
+</body>
+</html>

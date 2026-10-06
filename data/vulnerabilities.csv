@@ -1,0 +1,11 @@
+vulnerability_id,cve_id,product_category,severity,cvss_score,published_date,patch_available,exploitation_status_demo,priority_score,description
+VULN-2026-001,CVE-2026-1042,Web Application Server,High,7.8,2026-02-06,YES,IN_THE_WILD_SIMULATED,74,Apache Struts Deserialization Demo. Strictly analyzed as synthetic vulnerability awareness telemetry.
+VULN-2026-002,CVE-2026-2189,Cryptographic Library,Critical,9.8,2026-02-28,WORKAROUND_ONLY,THEORETICAL,98,OpenSSL Buffer Overflow Demo. Strictly analyzed as synthetic vulnerability awareness telemetry.
+VULN-2026-003,CVE-2026-3390,Operating System,Medium,5.4,2026-03-22,YES,THEORETICAL,51,Linux Kernel Privilege Escalation Demo. Strictly analyzed as synthetic vulnerability awareness telemetry.
+VULN-2026-004,CVE-2026-4401,Container Orchestration,High,8.2,2026-04-13,YES,THEORETICAL,77,Kubernetes API Authorization Bypass Demo. Strictly analyzed as synthetic vulnerability awareness telemetry.
+VULN-2026-005,CVE-2026-5512,Logging Framework,Critical,9.1,2026-05-05,YES,IN_THE_WILD_SIMULATED,86,Log4j Remote Code Execution Demo Variant. Strictly analyzed as synthetic vulnerability awareness telemetry.
+VULN-2026-006,CVE-2026-6623,Web Server,Low,3.7,2026-05-27,WORKAROUND_ONLY,IN_THE_WILD_SIMULATED,37,Nginx Header Information Disclosure Demo. Strictly analyzed as synthetic vulnerability awareness telemetry.
+VULN-2026-007,CVE-2026-7734,Database Server,High,8.6,2026-06-18,YES,POC_PUBLIC_DEFENSIVE_ONLY,81,PostgreSQL SQL Parsing Memory Corruption Demo. Strictly analyzed as synthetic vulnerability awareness telemetry.
+VULN-2026-008,CVE-2026-8845,Enterprise Mail,Critical,9.5,2026-07-10,WORKAROUND_ONLY,IN_THE_WILD_SIMULATED,95,Microsoft Exchange RPC Flaw Demo. Strictly analyzed as synthetic vulnerability awareness telemetry.
+VULN-2026-009,CVE-2026-9956,Network Hardware,Medium,6.3,2026-08-01,YES,THEORETICAL,59,Cisco IOS XE CLI Path Traversal Demo. Strictly analyzed as synthetic vulnerability awareness telemetry.
+VULN-2026-010,CVE-2026-1188,Application Framework,High,8.0,2026-08-23,WORKAROUND_ONLY,THEORETICAL,80,Spring Framework Expression Injection Demo. Strictly analyzed as synthetic vulnerability awareness telemetry.

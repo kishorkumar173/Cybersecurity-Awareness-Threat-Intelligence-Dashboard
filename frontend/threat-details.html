@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Investigation &amp; Detail View</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🛡️</div>
+      <div>
+        <div class="brand-title">CYBER INTEL &amp; AWARENESS</div>
+        <div style="font-size:0.68rem; color:#8b949e;">SOC Analyst Deep Investigation</div>
+      </div>
+      <span class="brand-badge">TIER-1 / TIER-2 WORKFLOW</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">SOC Dashboard</a></li>
+      <li><a href="threat-dashboard.html" class="nav-link">Threat Repository</a></li>
+      <li><a href="awareness.html" class="nav-link">Awareness Center</a></li>
+      <li><a href="quiz.html" class="nav-link">Security Quiz</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+
+    <div style="margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;">
+      <a href="threat-dashboard.html" class="btn btn-outline" style="font-size:0.8rem;">&larr; Back to Repository</a>
+      <div id="threatStatusControls" style="display:flex; gap:8px;">
+        <!-- Status change buttons injected via JS -->
+      </div>
+    </div>
+
+    <div class="detail-grid">
+
+      <!-- Left Column: Core Intel, ATT&CK, Timeline -->
+      <div>
+        
+        <!-- Header Card -->
+        <div class="detail-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+            <div>
+              <span id="detailThreatId" style="font-size:0.85rem; font-family:monospace; color:#c4b5fd; font-weight:700;">THR-2026-XXXX</span>
+              <h1 id="detailThreatName" style="font-size:1.5rem; color:#fff; margin-top:4px;">Loading Threat Dossier...</h1>
+            </div>
+            <div id="detailBadges" style="display:flex; gap:6px;"></div>
+          </div>
+          <p id="detailDescription" style="color:#cbd5e1; font-size:0.92rem; line-height:1.5; margin-bottom:18px;">
+            Analyzing defensive threat intelligence telemetry...
+          </p>
+
+          <div class="meta-list">
+            <div class="meta-item">
+              <div class="meta-label">Primary Indicator</div>
+              <div class="meta-value" id="detailIndicator" style="font-family:monospace; color:#34d399;">...</div>
+              <div id="detailIndicatorType" style="font-size:0.7rem; color:#8b949e; margin-top:2px;"></div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Telemetry Source</div>
+              <div class="meta-value" id="detailSource">...</div>
+              <div id="detailReliability" style="font-size:0.7rem; color:#8b949e; margin-top:2px;"></div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">First Recorded</div>
+              <div class="meta-value" id="detailFirstSeen" style="font-size:0.85rem;">...</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Last Sighting</div>
+              <div class="meta-value" id="detailLastSeen" style="font-size:0.85rem;">...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ATT&CK Mapping Card -->
+        <div class="detail-card">
+          <div class="detail-section-title">
+            <span>🎯</span> MITRE ATT&CK Matrix Alignment
+          </div>
+          <div id="detailAttackSection">
+            <div style="background:var(--bg-secondary); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                <span style="font-size:0.75rem; color:#8b949e; text-transform:uppercase;">TACTIC (The Why)</span>
+                <span id="detailAttackTacticId" style="font-size:0.75rem; color:#a78bfa; font-weight:700;"></span>
+              </div>
+              <div id="detailAttackTactic" style="font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:12px;">...</div>
+
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                <span style="font-size:0.75rem; color:#8b949e; text-transform:uppercase;">TECHNIQUE (The How)</span>
+                <span id="detailAttackTechId" style="font-size:0.75rem; font-family:monospace; color:#34d399; font-weight:700;"></span>
+              </div>
+              <div id="detailAttackTechnique" style="font-size:1rem; font-weight:600; color:#cbd5e1;">...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Threat Lifecycle Timeline -->
+        <div class="detail-card">
+          <div class="detail-section-title">
+            <span>⏱️</span> Threat Lifecycle &amp; Telemetry Timeline
+          </div>
+          <div class="timeline" id="detailTimeline">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Correlated Indicators -->
+        <div class="detail-card">
+          <div class="detail-section-title">
+            <span>🔗</span> Correlated Cluster Telemetry
+          </div>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:12px;">
+            Indicators sharing campaign IDs or associated defensive category telemetry in the same observation window.
+          </p>
+          <div id="detailRelatedIndicators" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Scores, Defensive Actions, Analyst Notes -->
+      <div>
+        
+        <!-- Risk & Confidence Gauges -->
+        <div class="detail-card">
+          <div class="detail-section-title">
+            <span>⚖️</span> Risk &amp; Confidence Assessment
+          </div>
+          
+          <div style="margin-bottom:18px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span style="font-size:0.8rem; color:var(--text-muted);">Defensive Risk Score</span>
+              <strong id="gaugeRiskScore" style="color:var(--coral); font-size:1.1rem;">0 / 100</strong>
+            </div>
+            <div style="background:#12161d; height:10px; border-radius:5px; overflow:hidden;">
+              <div id="barRiskScore" style="width:0%; height:100%; background:linear-gradient(90deg, #f59e0b, #ef4444); transition:width 0.4s;"></div>
+            </div>
+            <div style="font-size:0.72rem; color:var(--text-dim); margin-top:4px;">
+              Weighted: 30% Severity, 25% Conf, 15% Recency, 10% Sighting, 10% Source, 10% Context.
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span style="font-size:0.8rem; color:var(--text-muted);">Analytical Confidence</span>
+              <strong id="gaugeConfidenceScore" style="color:var(--violet); font-size:1.1rem;">0%</strong>
+            </div>
+            <div style="background:#12161d; height:10px; border-radius:5px; overflow:hidden;">
+              <div id="barConfidenceScore" style="width:0%; height:100%; background:linear-gradient(90deg, #10b981, #8b5cf6); transition:width 0.4s;"></div>
+            </div>
+            <div style="font-size:0.72rem; color:var(--text-dim); margin-top:4px;">
+              Represents evidentiary certainty in the source data, distinct from overall severity.
+            </div>
+          </div>
+        </div>
+
+        <!-- Defensive Guidance & Actions -->
+        <div class="detail-card" style="border-left:4px solid var(--emerald);">
+          <div class="detail-section-title">
+            <span>🛡️</span> Recommended Defensive Actions
+          </div>
+          <ul style="font-size:0.82rem; color:#cbd5e1; line-height:1.6; margin-left:18px;">
+            <li>Query internal firewall and proxy telemetry passively (do NOT probe outbound).</li>
+            <li>Verify if any internal endpoints queried DNS records for this artifact.</li>
+            <li>Add to passive SIEM watchlist; do not automatically isolate without secondary evidence.</li>
+            <li>Deliver relevant phishing and authentication micro-lessons to targeted user groups.</li>
+          </ul>
+        </div>
+
+        <!-- Analyst Notes & Log -->
+        <div class="detail-card">
+          <div class="detail-section-title">
+            <span>📝</span> SOC Analyst Notes
+          </div>
+          
+          <div id="analystNotesContainer" style="margin-bottom:16px; max-height:200px; overflow-y:auto;">
+            <!-- Populated via JS -->
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <textarea id="newNoteInput" rows="2" style="width:100%; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-sm); color:#fff; padding:8px; font-size:0.85rem; outline:none;" placeholder="Add defensive triage comment or observation..."></textarea>
+            <button class="btn btn-violet" style="align-self:flex-end; padding:6px 14px; font-size:0.8rem;" onclick="submitAnalystNote()">Add Note</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <div><strong>Cybersecurity Awareness &amp; Threat Intelligence Dashboard</strong> &mdash; Industry Defensive Architecture</div>
+  </footer>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const threatId = urlParams.get("id") || "THR-2026-001";
+
+    async function loadThreatDetails() {
+      try {
+        const res = await fetch(`/api/threats/${threatId}`);
+        if (!res.ok) {
+          document.getElementById("detailThreatName").textContent = "Threat Dossier Not Found";
+          return;
+        }
+        const data = await res.json();
+        renderThreatData(data);
+      } catch (err) {
+        console.error("Failed to load dossier:", err);
+      }
+    }
+
+    function renderThreatData(t) {
+      document.getElementById("detailThreatId").textContent = t.threat_id;
+      document.getElementById("detailThreatName").textContent = t.threat_name;
+      document.getElementById("detailDescription").textContent = t.description;
+      document.getElementById("detailIndicator").textContent = t.indicator_value || "N/A";
+      document.getElementById("detailIndicatorType").textContent = t.indicator_type || "N/A";
+      document.getElementById("detailSource").textContent = t.source_name || "Internal Feed";
+      document.getElementById("detailReliability").textContent = t.source_reliability || "B – Usually Reliable";
+      document.getElementById("detailFirstSeen").textContent = t.first_seen || "N/A";
+      document.getElementById("detailLastSeen").textContent = t.last_seen || "N/A";
+
+      // Badges
+      const badges = document.getElementById("detailBadges");
+      badges.innerHTML = `
+        <span class="badge badge-category">${t.category}</span>
+        <span class="badge badge-${t.severity.toLowerCase()}">${t.severity}</span>
+        <span class="badge badge-status">${t.status}</span>
+      `;
+
+      // Status Controls
+      const statusCtrls = document.getElementById("threatStatusControls");
+      statusCtrls.innerHTML = `
+        <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="updateStatus('MONITORING')">Set Monitoring</button>
+        <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="updateStatus('CLOSED')">Close Dossier</button>
+        <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem; color:#f43f5e;" onclick="updateStatus('FALSE_POSITIVE')">Flag False Positive</button>
+      `;
+
+      // ATT&CK
+      if (t.mitre_tactic) {
+        document.getElementById("detailAttackTactic").textContent = t.mitre_tactic;
+        document.getElementById("detailAttackTechnique").textContent = t.mitre_technique || "General Tactic Execution";
+        document.getElementById("detailAttackTechId").textContent = t.mitre_technique_id || "";
+      } else {
+        document.getElementById("detailAttackSection").innerHTML = `
+          <div style="font-size:0.85rem; color:#8b949e; padding:12px; background:var(--bg-secondary); border-radius:4px;">
+            Evidence currently insufficient to justify explicit ATT&CK technique mapping.
+          </div>
+        `;
+      }
+
+      // Gauges
+      document.getElementById("gaugeRiskScore").textContent = `${t.risk_score} / 100`;
+      document.getElementById("barRiskScore").style.width = `${t.risk_score}%`;
+      document.getElementById("gaugeConfidenceScore").textContent = `${t.confidence_score}%`;
+      document.getElementById("barConfidenceScore").style.width = `${t.confidence_score}%`;
+
+      // Timeline
+      const tl = document.getElementById("detailTimeline");
+      tl.innerHTML = "";
+      (t.timeline || []).forEach(stage => {
+        const item = document.createElement("div");
+        item.className = "timeline-item";
+        item.innerHTML = `
+          <div class="timeline-dot"></div>
+          <div class="timeline-title">${stage.stage}</div>
+          <div class="timeline-time">${stage.timestamp || ''}</div>
+          <div class="timeline-desc">${stage.description}</div>
+        `;
+        tl.appendChild(item);
+      });
+
+      // Related Indicators
+      const relContainer = document.getElementById("detailRelatedIndicators");
+      relContainer.innerHTML = "";
+      if (!t.related_indicators || t.related_indicators.length === 0) {
+        relContainer.innerHTML = `<div style="color:#8b949e; font-size:0.8rem;">No related indicators clustered in this window.</div>`;
+      } else {
+        t.related_indicators.forEach(r => {
+          const d = document.createElement("div");
+          d.style = "background:var(--bg-secondary); border:1px solid var(--border-subtle); padding:10px; border-radius:4px;";
+          d.innerHTML = `
+            <a href="threat-details.html?id=${r.threat_id}" style="color:#c4b5fd; font-weight:700; text-decoration:none; font-size:0.82rem;">${r.threat_id}</a>
+            <div style="font-family:monospace; color:#34d399; font-size:0.8rem; margin:4px 0;">${r.indicator_value}</div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="badge badge-category" style="font-size:0.65rem;">${r.indicator_type}</span>
+              <span style="font-size:0.75rem; color:#8b949e;">Risk ${r.risk_score}</span>
+            </div>
+          `;
+          relContainer.appendChild(d);
+        });
+      }
+
+      // Notes
+      renderNotes(t.analyst_notes || []);
+    }
+
+    function renderNotes(notes) {
+      const c = document.getElementById("analystNotesContainer");
+      c.innerHTML = "";
+      if (notes.length === 0) {
+        c.innerHTML = `<div style="font-size:0.8rem; color:#8b949e;">No notes recorded yet.</div>`;
+        return;
+      }
+      notes.forEach(n => {
+        const d = document.createElement("div");
+        d.style = "background:var(--bg-secondary); padding:8px 12px; border-radius:4px; margin-bottom:8px; border-left:2px solid var(--violet);";
+        d.innerHTML = `
+          <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:#8b949e; margin-bottom:4px;">
+            <span>${n.author || 'Analyst'}</span>
+            <span>${n.created_at}</span>
+          </div>
+          <div style="font-size:0.82rem; color:#e2e8f0;">${n.note}</div>
+        `;
+        c.appendChild(d);
+      });
+    }
+
+    async function updateStatus(newStatus) {
+      try {
+        const res = await fetch(`/api/threats/${threatId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus })
+        });
+        if (res.ok) {
+          loadThreatDetails();
+        }
+      } catch (err) {
+        alert("Failed to update status: " + err.message);
+      }
+    }
+
+    async function submitAnalystNote() {
+      const noteInput = document.getElementById("newNoteInput");
+      const note = noteInput.value.trim();
+      if (!note) return;
+
+      try {
+        const res = await fetch(`/api/threats/${threatId}/notes`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ note: note, author: "SOC Analyst (Tier-1)" })
+        });
+        if (res.ok) {
+          noteInput.value = "";
+          loadThreatDetails();
+        }
+      } catch (err) {
+        alert("Failed to save note: " + err.message);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadThreatDetails);
+  </script>
+</body>
+</html>

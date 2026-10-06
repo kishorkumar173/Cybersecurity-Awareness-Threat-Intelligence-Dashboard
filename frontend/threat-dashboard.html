@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Intelligence Repository &amp; IOC Triage</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🛡️</div>
+      <div>
+        <div class="brand-title">CYBER INTEL &amp; AWARENESS</div>
+        <div style="font-size:0.68rem; color:#8b949e;">Threat Repository &amp; SOC Queue</div>
+      </div>
+      <span class="brand-badge">DEFENSIVE ONLY</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link">SOC Dashboard</a></li>
+      <li><a href="threat-dashboard.html" class="nav-link active">Threat Repository</a></li>
+      <li><a href="awareness.html" class="nav-link">Awareness Center</a></li>
+      <li><a href="quiz.html" class="nav-link">Security Quiz</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+
+    <div class="panel-header" style="border:none; margin-bottom:12px;">
+      <div>
+        <h2 style="font-size:1.6rem; color:#fff;">Threat Intelligence &amp; Indicator Repository</h2>
+        <p style="color:var(--text-muted); font-size:0.88rem; margin-top:4px;">
+          Explore, filter, and triage normalized threat records and associated indicators across 10 security domains.
+        </p>
+      </div>
+    </div>
+
+    <!-- Filter & Sort Bar -->
+    <div class="filter-bar">
+      <div>
+        <label style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:4px;">SEVERITY</label>
+        <select id="filterSeverity" class="filter-select" onchange="applyFilters()">
+          <option value="ALL">All Severities</option>
+          <option value="CRITICAL">Critical</option>
+          <option value="HIGH">High</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="LOW">Low</option>
+          <option value="INFORMATIONAL">Informational</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:4px;">CATEGORY</label>
+        <select id="filterCategory" class="filter-select" onchange="applyFilters()">
+          <option value="ALL">All Categories</option>
+          <option value="PHISHING">Phishing</option>
+          <option value="MALWARE">Malware</option>
+          <option value="RANSOMWARE">Ransomware</option>
+          <option value="CREDENTIAL THREATS">Credential Threats</option>
+          <option value="WEB THREATS">Web Threats</option>
+          <option value="NETWORK THREATS">Network Threats</option>
+          <option value="VULNERABILITY EXPOSURE">Vulnerability Exposure</option>
+          <option value="SOCIAL ENGINEERING">Social Engineering</option>
+          <option value="DATA EXPOSURE">Data Exposure</option>
+          <option value="ACCOUNT SECURITY">Account Security</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:4px;">STATUS</label>
+        <select id="filterStatus" class="filter-select" onchange="applyFilters()">
+          <option value="ALL">All Statuses</option>
+          <option value="NEW">New</option>
+          <option value="UNDER_REVIEW">Under Review</option>
+          <option value="MONITORING">Monitoring</option>
+          <option value="CLOSED">Closed</option>
+          <option value="FALSE_POSITIVE">False Positive</option>
+        </select>
+      </div>
+
+      <div>
+        <label style="font-size:0.75rem; color:var(--text-muted); display:block; margin-bottom:4px;">SORT BY</label>
+        <select id="sortBy" class="filter-select" onchange="applyFilters()">
+          <option value="newest">Newest First</option>
+          <option value="highest_risk">Highest Risk Score</option>
+          <option value="highest_confidence">Highest Confidence</option>
+          <option value="oldest">Oldest</option>
+        </select>
+      </div>
+
+      <div style="margin-left:auto; display:flex; align-items:flex-end;">
+        <button class="btn btn-emerald" onclick="applyFilters()">Refresh Data</button>
+      </div>
+    </div>
+
+    <!-- Repository Table -->
+    <div class="panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span id="repoCountLabel" style="font-size:0.85rem; color:var(--text-muted);">Showing 0 threat records</span>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-outline" style="padding:4px 10px; font-size:0.78rem;" onclick="prevPage()">Previous</button>
+          <button class="btn btn-outline" style="padding:4px 10px; font-size:0.78rem;" onclick="nextPage()">Next</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Threat ID</th>
+              <th>Threat Name</th>
+              <th>Category</th>
+              <th>Indicator Type</th>
+              <th>Indicator Value</th>
+              <th>Severity</th>
+              <th>Risk Score</th>
+              <th>Confidence</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="threatsTableBody">
+            <tr><td colspan="10" style="text-align:center; color:#8b949e;">Loading threats...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div><strong>Cybersecurity Awareness &amp; Threat Intelligence Dashboard</strong> &mdash; Industry Defensive Architecture</div>
+  </footer>
+
+  <script>
+    let currentOffset = 0;
+    const limit = 25;
+
+    async function loadThreats() {
+      const sev = document.getElementById("filterSeverity").value;
+      const cat = document.getElementById("filterCategory").value;
+      const status = document.getElementById("filterStatus").value;
+      const sort = document.getElementById("sortBy").value;
+
+      const url = `/api/threats?severity=${sev}&category=${cat}&status=${status}&sort_by=${sort}&limit=${limit}&offset=${currentOffset}`;
+      
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        document.getElementById("repoCountLabel").textContent = `Showing ${data.threats.length} of ${data.total} threat records`;
+        renderTable(data.threats);
+      } catch (e) {
+        console.error("Failed to load threats:", e);
+      }
+    }
+
+    function renderTable(threats) {
+      const tbody = document.getElementById("threatsTableBody");
+      tbody.innerHTML = "";
+      if (threats.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; color:#8b949e;">No threats matching active filters.</td></tr>`;
+        return;
+      }
+
+      threats.forEach(t => {
+        const tr = document.createElement("tr");
+        const sevClass = `badge-${t.severity ? t.severity.toLowerCase() : 'info'}`;
+        const riskPill = t.risk_score >= 80 ? 'score-high' : t.risk_score >= 50 ? 'score-med' : 'score-low';
+
+        tr.innerHTML = `
+          <td><a href="threat-details.html?id=${t.threat_id}" style="color:#c4b5fd; text-decoration:none; font-weight:700;">${t.threat_id}</a></td>
+          <td style="font-weight:600;">${escapeHtml(t.threat_name)}</td>
+          <td><span class="badge badge-category">${t.category}</span></td>
+          <td style="font-size:0.75rem; color:#8b949e;">${t.indicator_type || 'N/A'}</td>
+          <td style="font-family:monospace; color:#34d399;">${escapeHtml(t.indicator_value || 'N/A')}</td>
+          <td><span class="badge ${sevClass}">${t.severity}</span></td>
+          <td><span class="score-pill ${riskPill}">${t.risk_score}/100</span></td>
+          <td><span style="color:#a78bfa; font-weight:600;">${t.confidence_score}%</span></td>
+          <td><span class="badge badge-status">${t.status}</span></td>
+          <td><a href="threat-details.html?id=${t.threat_id}" class="btn btn-outline" style="padding:3px 8px; font-size:0.75rem;">Investigate</a></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function applyFilters() {
+      currentOffset = 0;
+      loadThreats();
+    }
+
+    function nextPage() {
+      currentOffset += limit;
+      loadThreats();
+    }
+
+    function prevPage() {
+      if (currentOffset >= limit) {
+        currentOffset -= limit;
+        loadThreats();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadThreats);
+  </script>
+</body>
+</html>
